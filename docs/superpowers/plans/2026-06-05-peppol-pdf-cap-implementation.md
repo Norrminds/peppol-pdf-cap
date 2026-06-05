@@ -1,6 +1,6 @@
 # Peppol PDF CAP Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Build a standalone SAP CAP Node.js service that accepts raw Peppol UBL Invoice or CreditNote XML and returns a professional PDF invoice.
 
@@ -42,7 +42,7 @@
 - Create: `mta.yaml`
 - Create: `manifest.yml`
 
-- [ ] **Step 1: Add scaffold files**
+- [x] **Step 1: Add scaffold files**
 
 Create `package.json` with scripts:
 
@@ -89,7 +89,7 @@ cds.on('bootstrap', app => {
 module.exports = cds.server
 ```
 
-- [ ] **Step 2: Install dependencies**
+- [x] **Step 2: Install dependencies**
 
 Run:
 
@@ -99,7 +99,7 @@ npm install
 
 Expected: `package-lock.json` is created and install completes.
 
-- [ ] **Step 3: Commit scaffold**
+- [x] **Step 3: Commit scaffold**
 
 Run:
 
@@ -117,7 +117,7 @@ git commit -m "chore: scaffold CAP PDF service"
 - Create: `test/fixtures/credit-note.xml`
 - Create: `test/parse-ubl.test.js`
 
-- [ ] **Step 1: Write parser tests**
+- [x] **Step 1: Write parser tests**
 
 Cover:
 
@@ -127,7 +127,7 @@ Cover:
 - unsupported XML root throws a bad request error
 - DTD/entity declarations are rejected
 
-- [ ] **Step 2: Run parser tests to verify failure**
+- [x] **Step 2: Run parser tests to verify failure**
 
 Run:
 
@@ -137,7 +137,7 @@ npm test -- test/parse-ubl.test.js
 
 Expected: FAIL because parser module does not exist.
 
-- [ ] **Step 3: Implement parser**
+- [x] **Step 3: Implement parser**
 
 Implement:
 
@@ -153,7 +153,7 @@ Parser rules:
 - accept only `Invoice` and `CreditNote`
 - keep tag values as strings
 
-- [ ] **Step 4: Run parser tests**
+- [x] **Step 4: Run parser tests**
 
 Run:
 
@@ -163,7 +163,7 @@ npm test -- test/parse-ubl.test.js
 
 Expected: PASS.
 
-- [ ] **Step 5: Commit parser**
+- [x] **Step 5: Commit parser**
 
 Run:
 
@@ -179,7 +179,7 @@ git commit -m "feat: parse UBL invoice XML"
 - Create: `srv/lib/format.js`
 - Create: `test/normalize-invoice.test.js`
 
-- [ ] **Step 1: Write normalizer tests**
+- [x] **Step 1: Write normalizer tests**
 
 Cover:
 
@@ -187,7 +187,7 @@ Cover:
 - credit note extracts same model shape with type `credit-note`
 - missing required supplier/customer/amount fields throws `BadRequestError`
 
-- [ ] **Step 2: Run normalizer tests to verify failure**
+- [x] **Step 2: Run normalizer tests to verify failure**
 
 Run:
 
@@ -197,7 +197,7 @@ npm test -- test/normalize-invoice.test.js
 
 Expected: FAIL because normalizer module does not exist.
 
-- [ ] **Step 3: Implement normalizer**
+- [x] **Step 3: Implement normalizer**
 
 Implement helpers:
 
@@ -230,7 +230,7 @@ Return a model shaped like:
 }
 ```
 
-- [ ] **Step 4: Run normalizer tests**
+- [x] **Step 4: Run normalizer tests**
 
 Run:
 
@@ -240,7 +240,7 @@ npm test -- test/normalize-invoice.test.js
 
 Expected: PASS.
 
-- [ ] **Step 5: Commit normalizer**
+- [x] **Step 5: Commit normalizer**
 
 Run:
 
@@ -255,7 +255,7 @@ git commit -m "feat: normalize UBL invoice data"
 - Create: `srv/lib/render-pdf.js`
 - Create: `test/render-pdf.test.js`
 
-- [ ] **Step 1: Write renderer tests**
+- [x] **Step 1: Write renderer tests**
 
 Cover:
 
@@ -263,7 +263,7 @@ Cover:
 - buffer starts with `%PDF`
 - invoice ID appears in generated PDF bytes when decoded as latin1 or the renderer completes without throwing if compression hides text
 
-- [ ] **Step 2: Run renderer tests to verify failure**
+- [x] **Step 2: Run renderer tests to verify failure**
 
 Run:
 
@@ -273,7 +273,7 @@ npm test -- test/render-pdf.test.js
 
 Expected: FAIL because renderer module does not exist.
 
-- [ ] **Step 3: Implement renderer**
+- [x] **Step 3: Implement renderer**
 
 Use `pdfmake` with standard PDF fonts:
 
@@ -304,7 +304,7 @@ Design requirements:
 - repeated table headers
 - footer with generated timestamp
 
-- [ ] **Step 4: Run renderer tests**
+- [x] **Step 4: Run renderer tests**
 
 Run:
 
@@ -314,7 +314,7 @@ npm test -- test/render-pdf.test.js
 
 Expected: PASS.
 
-- [ ] **Step 5: Commit renderer**
+- [x] **Step 5: Commit renderer**
 
 Run:
 
@@ -331,7 +331,7 @@ git commit -m "feat: render invoice PDF"
 - Create: `test/invoice-pdf-route.test.js`
 - Modify: `server.js` if route export shape changes
 
-- [ ] **Step 1: Write route tests**
+- [x] **Step 1: Write route tests**
 
 Cover:
 
@@ -343,7 +343,7 @@ Cover:
 - missing API key returns `401` when `PDF_API_KEY` is set
 - API key is not required when `PDF_API_KEY` is unset
 
-- [ ] **Step 2: Run route tests to verify failure**
+- [x] **Step 2: Run route tests to verify failure**
 
 Run:
 
@@ -353,7 +353,7 @@ npm test -- test/invoice-pdf-route.test.js
 
 Expected: FAIL because route module does not exist.
 
-- [ ] **Step 3: Implement route**
+- [x] **Step 3: Implement route**
 
 Route behavior:
 
@@ -367,7 +367,7 @@ Route behavior:
 - map typed errors to JSON
 - log unexpected errors and return generic `500`
 
-- [ ] **Step 4: Run route tests**
+- [x] **Step 4: Run route tests**
 
 Run:
 
@@ -377,7 +377,7 @@ npm test -- test/invoice-pdf-route.test.js
 
 Expected: PASS.
 
-- [ ] **Step 5: Run all tests**
+- [x] **Step 5: Run all tests**
 
 Run:
 
@@ -387,7 +387,7 @@ npm test
 
 Expected: PASS.
 
-- [ ] **Step 6: Commit route**
+- [x] **Step 6: Commit route**
 
 Run:
 
@@ -402,7 +402,7 @@ git commit -m "feat: expose invoice PDF endpoint"
 - Modify: `README.md`
 - Modify: `docs/superpowers/plans/2026-06-05-peppol-pdf-cap-implementation.md` as steps are checked off
 
-- [ ] **Step 1: Run all tests**
+- [x] **Step 1: Run all tests**
 
 Run:
 
@@ -412,7 +412,7 @@ npm test
 
 Expected: PASS.
 
-- [ ] **Step 2: Start the service manually**
+- [x] **Step 2: Start the service manually**
 
 Run:
 
@@ -422,7 +422,7 @@ npm start
 
 Expected: service listens on `http://localhost:4004`.
 
-- [ ] **Step 3: Generate sample invoice PDF**
+- [x] **Step 3: Generate sample invoice PDF**
 
 Run in a second shell:
 
@@ -436,7 +436,7 @@ curl -sS -X POST \
 
 Expected: `invoice.pdf` exists and starts with `%PDF`.
 
-- [ ] **Step 4: Generate sample credit note PDF**
+- [x] **Step 4: Generate sample credit note PDF**
 
 Run:
 
@@ -450,7 +450,7 @@ curl -sS -X POST \
 
 Expected: `credit-note.pdf` exists and starts with `%PDF`.
 
-- [ ] **Step 5: Document local and BTP usage**
+- [x] **Step 5: Document local and BTP usage**
 
 README must include:
 
@@ -464,7 +464,7 @@ README must include:
 - `mta.yaml` and `manifest.yml` deployment notes
 - iFlow call shape
 
-- [ ] **Step 6: Commit docs and verification artifacts**
+- [x] **Step 6: Commit docs and verification artifacts**
 
 Do not commit generated PDF files.
 
@@ -477,10 +477,10 @@ git commit -m "docs: document Peppol PDF service usage"
 
 ## Final Verification
 
-- [ ] Run `npm test`
-- [ ] Run `npm start` and check `GET /health`
-- [ ] Generate invoice PDF with `curl`
-- [ ] Generate credit note PDF with `curl`
-- [ ] Check `git status --short`
+- [x] Run `npm test`
+- [x] Run `npm start` and check `GET /health`
+- [x] Generate invoice PDF with `curl`
+- [x] Generate credit note PDF with `curl`
+- [x] Check `git status --short`
 
 Expected final state: tests pass, local service can generate both PDFs, deployment descriptors exist, and generated PDFs are not tracked by git.

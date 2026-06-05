@@ -28,6 +28,25 @@ POST /invoice-pdf
 
 `POST /invoice-pdf` accepts raw XML without SBDH and returns `application/pdf`.
 
+Successful response:
+
+```text
+HTTP/1.1 200 OK
+Content-Type: application/pdf
+Content-Disposition: inline; filename="<document-id>.pdf"
+```
+
+Error responses are JSON:
+
+```json
+{
+  "error": {
+    "code": "bad_request",
+    "message": "Invalid XML"
+  }
+}
+```
+
 ## Configuration
 
 | Variable | Required | Default | Description |
@@ -46,6 +65,16 @@ curl -sS -X POST \
   --output invoice.pdf
 ```
 
+Credit note:
+
+```bash
+curl -sS -X POST \
+  -H "Content-Type: application/xml" \
+  --data-binary @test/fixtures/credit-note.xml \
+  http://localhost:4004/invoice-pdf \
+  --output credit-note.pdf
+```
+
 With API key enabled:
 
 ```bash
@@ -59,6 +88,19 @@ curl -sS -X POST \
   --output invoice.pdf
 ```
 
+## iFlow Contract
+
+Configure the iFlow HTTP call as a synchronous request:
+
+- Method: `POST`
+- URL: `https://<btp-route>/invoice-pdf`
+- Request body: raw Peppol UBL `Invoice` or `CreditNote` XML, no SBDH
+- Header: `Content-Type: application/xml`
+- Header when configured: `X-API-Key: <PDF_API_KEY>`
+- Expected response: PDF bytes with `Content-Type: application/pdf`
+
+The iFlow can store, attach, or forward the PDF response body directly.
+
 ## BTP Deployment
 
 This repo includes both:
@@ -67,3 +109,21 @@ This repo includes both:
 - `manifest.yml` for a simple `cf push`
 
 The first version does not require HANA, XSUAA, destinations, or Chromium.
+
+Simple Cloud Foundry deployment:
+
+```bash
+cf login --sso
+cf push
+cf set-env peppol-pdf-cap PDF_API_KEY '<shared-secret>'
+cf restage peppol-pdf-cap
+```
+
+MTA deployment:
+
+```bash
+mbt build
+cf deploy mta_archives/peppol-pdf-cap_1.0.0.mtar
+```
+
+Set `PDF_API_KEY` in the BTP application environment before connecting the iFlow outside local test scenarios.
