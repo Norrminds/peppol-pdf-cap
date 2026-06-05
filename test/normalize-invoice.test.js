@@ -76,6 +76,14 @@ describe('normalizeUblDocument', () => {
     expect(model.totals.due).toBe('125.00')
   })
 
+  test('normalizes invoice line notes for detailed utility invoices', () => {
+    const xml = readFileSync(join(import.meta.dirname, '..', 'samples', 'tekniska-verken-invoice.xml'), 'utf8')
+    const model = normalizeUblDocument(parseUblXml(xml))
+
+    expect(model.lines[0].note).toContain('Period: 2026-05-01 - 2026-05-31')
+    expect(model.lines[1].note).toContain('Mätare: 735999144013330979:P.s')
+  })
+
   test('rejects documents that cannot produce a meaningful PDF', () => {
     const parsed = parseUblXml(`<?xml version="1.0"?>
       <Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2">

@@ -128,6 +128,7 @@ function normalizeLines(isCreditNote, root) {
         textAt(item, 'Name'),
         toText(item.Description)
       ], ' - '),
+      note: compact(asArray(line.Note)).join('\n'),
       quantity: toText(quantity),
       unitCode: quantity && typeof quantity === 'object' ? toText(quantity['@_unitCode']) : '',
       unitPrice: textAt(line, 'Price.PriceAmount'),

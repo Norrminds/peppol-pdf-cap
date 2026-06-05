@@ -264,7 +264,7 @@ function lineItemsTable(model) {
       tableHeader('Line total')
     ],
     ...model.lines.map(line => [
-      { text: line.description || `Line ${line.id || ''}`.trim(), margin: [0, 3, 0, 3] },
+      lineDescriptionCell(line),
       right(line.quantity),
       right(line.unitCode),
       right(money(line.unitPrice, model.currency)),
@@ -289,6 +289,25 @@ function lineItemsTable(model) {
       paddingTop: () => 5,
       paddingBottom: () => 5
     }
+  }
+}
+
+function lineDescriptionCell(line) {
+  const description = line.description || `Line ${line.id || ''}`.trim()
+  const stack = [{ text: description || 'n/a' }]
+
+  if (line.note) {
+    stack.push({
+      text: line.note,
+      color: colors.muted,
+      fontSize: 7.4,
+      margin: [0, 2, 0, 0]
+    })
+  }
+
+  return {
+    stack,
+    margin: [0, 3, 0, 3]
   }
 }
 

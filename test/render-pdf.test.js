@@ -29,6 +29,16 @@ describe('renderInvoicePdf', () => {
     expect(serialized).toContain('Amount due')
   })
 
+  test('includes line notes in the PDF document definition', () => {
+    const xml = readFileSync(join(import.meta.dirname, '..', 'samples', 'tekniska-verken-invoice.xml'), 'utf8')
+    const model = normalizeUblDocument(parseUblXml(xml))
+    const definition = buildInvoiceDocDefinition(model, new Date('2026-06-05T12:00:00Z'))
+    const serialized = JSON.stringify(definition)
+
+    expect(serialized).toContain('Period: 2026-05-01 - 2026-05-31')
+    expect(serialized).toContain('Mätare: 7359992925686464')
+  })
+
   test('renders a PDF buffer', async () => {
     const buffer = await renderInvoicePdf(invoiceModel(), new Date('2026-06-05T12:00:00Z'))
 
