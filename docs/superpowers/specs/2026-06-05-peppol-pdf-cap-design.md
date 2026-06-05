@@ -47,9 +47,20 @@ Error responses:
 
 Error bodies are JSON so the iFlow can log meaningful details.
 
+Health endpoint:
+
+```text
+GET /health
+```
+
+Response:
+
+- Status: `200`
+- Body: JSON service status, useful for local checks and BTP route health checks.
+
 ## Architecture
 
-Use a CAP Node.js project with a custom Express route mounted during CAP bootstrap. CAP remains useful for BTP-compatible project structure and deployment conventions, while the PDF endpoint stays a normal HTTP route because it is not an OData use case.
+Use a CAP Node.js project with a custom Express route mounted during CAP bootstrap, for example with `cds.on('bootstrap', app => ...)`. CAP remains useful for BTP-compatible project structure and deployment conventions, while the PDF endpoint stays a normal HTTP route because it is not an OData use case.
 
 Primary modules:
 
@@ -65,11 +76,13 @@ Primary modules:
 
 1. The iFlow posts raw XML to `/invoice-pdf`.
 2. The route checks `PDF_API_KEY` only if it is configured.
-3. The route reads the request body as raw text with a size limit.
+3. The route reads the request body as raw text with a configurable size limit.
 4. The XML parser rejects malformed XML and unsupported roots.
 5. The normalizer extracts a stable invoice model from UBL `Invoice` or `CreditNote`.
 6. The PDF renderer turns the normalized model into a `pdfmake` document definition.
-7. The route streams or buffers the PDF and returns it as `application/pdf`.
+7. The route returns the PDF as `application/pdf` with a sanitized filename.
+
+The default XML size limit should be conservative, such as `5mb`, and overrideable with an environment variable such as `XML_BODY_LIMIT`.
 
 ## Normalized Document Model
 
@@ -89,7 +102,14 @@ The first version extracts the fields needed for a complete paper invoice:
 - Monetary totals: net amount, tax amount, gross amount, prepaid amount, rounding amount, amount due
 - Notes and legal/payment terms
 
-The model should tolerate optional UBL fields, but fail fast if the document cannot produce a meaningful PDF, such as missing document ID, supplier, customer, currency, or payable total.
+The model should tolerate optional UBL fields, but fail fast if the document cannot produce a meaningful PDF, such as missing document ID, supplier, customer, currency, or payable total. Values from the UBL document are used for presentation. The first version should not recalculate legal invoice totals or claim Peppol validation beyond structural parsing and required display fields.
+
+XML parsing must be local and safe:
+
+- Do not fetch external resources.
+- Do not process external entities.
+- Reject DTD or entity declarations if the chosen parser exposes them.
+- Treat all text values as untrusted input and escape or sanitize where the PDF engine requires it.
 
 ## PDF Design
 
