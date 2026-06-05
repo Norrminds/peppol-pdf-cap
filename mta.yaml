@@ -1,0 +1,23 @@
+_schema-version: '3.3'
+ID: peppol-pdf-cap
+version: 1.0.0
+description: Peppol UBL invoice to PDF CAP service
+
+parameters:
+  enable-parallel-deployments: true
+
+modules:
+  - name: peppol-pdf-cap-srv
+    type: nodejs
+    path: .
+    parameters:
+      buildpack: nodejs_buildpack
+      memory: 256M
+      disk-quota: 512M
+    properties:
+      NODE_ENV: production
+      XML_BODY_LIMIT: 5mb
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: ${default-url}
