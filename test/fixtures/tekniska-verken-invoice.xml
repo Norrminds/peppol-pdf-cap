@@ -1,0 +1,243 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Invoice xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:cec="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2">
+  <cbc:CustomizationID>urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0</cbc:CustomizationID>
+  <cbc:ProfileID>urn:fdc:peppol.eu:2017:poacc:billing:01:1.0</cbc:ProfileID>
+  <cbc:ID>26060131647046</cbc:ID>
+  <cbc:IssueDate>2026-06-05</cbc:IssueDate>
+  <cbc:DueDate>2026-07-06</cbc:DueDate>
+  <cbc:InvoiceTypeCode>380</cbc:InvoiceTypeCode>
+  <cbc:Note>Beräknad årsanvändning: 0 kWh
+Senaste avläsning: 2026-06-01
+Avtalsinformation Produkt: Konsumtionsabonnemang 16-63 A standard
+Avtalstid: Tillsvidare
+Anläggningsinformation
+Anl id: 735 999 144 013 330 979
+Anl adress: Torggatan 1
+Nätägare: Tekniska verken Linköping Nät AB
+Områdes id: LNK, Elområde: SE3
+Mätarid: 7359992925686464
+Mätarställning: 0.0 kWh
+
+Avläst: 2026-05-01 Ställning 289.850 kWh
+Avläst: 2026-06-01 Ställning 289.850 kWh
+Förbrukning: 0.000 kWh
+
+Elnät på uppdrag av Tekniska verken i Linköping AB (publ) VAT No SE556004972701 &amp; Tekniska verken Katrineholm Nät AB, VAT No SE556426858801
+
+Kundservice 0771 - 25 26 27
+Öppettider mån-tors 8-17, fre 9-16
+kundservice@tekniskaverken.se tekniskaverken.se facebook.com/Tekniskaverken</cbc:Note>
+  <cbc:DocumentCurrencyCode>SEK</cbc:DocumentCurrencyCode>
+  <cbc:BuyerReference>5594936055</cbc:BuyerReference>
+  <cac:AdditionalDocumentReference>
+    <cbc:ID schemeID="ACD">735999144013330979</cbc:ID>
+    <cbc:DocumentTypeCode>130</cbc:DocumentTypeCode>
+  </cac:AdditionalDocumentReference>
+  <cac:AccountingSupplierParty>
+    <cac:Party>
+      <cbc:EndpointID schemeID="0007">5560049727</cbc:EndpointID>
+      <cac:PartyIdentification>
+        <cbc:ID schemeID="0007">5560049727</cbc:ID>
+      </cac:PartyIdentification>
+      <cac:PartyName>
+        <cbc:Name>Tekniska verken i Linköping AB (publ)</cbc:Name>
+      </cac:PartyName>
+      <cac:PostalAddress>
+        <cbc:StreetName>Box 1500</cbc:StreetName>
+        <cbc:CityName>Linköping</cbc:CityName>
+        <cbc:PostalZone>58115</cbc:PostalZone>
+        <cac:Country>
+          <cbc:IdentificationCode>SE</cbc:IdentificationCode>
+        </cac:Country>
+      </cac:PostalAddress>
+      <cac:PartyTaxScheme>
+        <cbc:CompanyID>SE556004972701</cbc:CompanyID>
+        <cac:TaxScheme>
+          <cbc:ID>VAT</cbc:ID>
+        </cac:TaxScheme>
+      </cac:PartyTaxScheme>
+      <cac:PartyTaxScheme>
+        <cbc:CompanyID>Godkänd för F-skatt</cbc:CompanyID>
+        <cac:TaxScheme>
+          <cbc:ID>TAX</cbc:ID>
+        </cac:TaxScheme>
+      </cac:PartyTaxScheme>
+      <cac:PartyLegalEntity>
+        <cbc:RegistrationName>Tekniska verken i Linköping AB (publ)</cbc:RegistrationName>
+        <cbc:CompanyID schemeID="0007">5560049727</cbc:CompanyID>
+        <cbc:CompanyLegalForm>Linköping</cbc:CompanyLegalForm>
+      </cac:PartyLegalEntity>
+      <cac:Contact>
+        <cbc:Telephone>0771 - 25 26 27</cbc:Telephone>
+        <cbc:ElectronicMail>kundservice@tekniskaverken.se</cbc:ElectronicMail>
+      </cac:Contact>
+    </cac:Party>
+  </cac:AccountingSupplierParty>
+  <cac:AccountingCustomerParty>
+    <cac:Party>
+      <cbc:EndpointID schemeID="0007">5594936055</cbc:EndpointID>
+      <cac:PartyIdentification>
+        <cbc:ID schemeID="0007">5594936055</cbc:ID>
+      </cac:PartyIdentification>
+      <cac:PartyName>
+        <cbc:Name>Norrminds AB</cbc:Name>
+      </cac:PartyName>
+      <cac:PostalAddress>
+        <cbc:StreetName>Torggatan 1</cbc:StreetName>
+        <cbc:AdditionalStreetName>C/o: Dospace</cbc:AdditionalStreetName>
+        <cbc:CityName>Linköping</cbc:CityName>
+        <cbc:PostalZone>582 19</cbc:PostalZone>
+        <cac:Country>
+          <cbc:IdentificationCode>SE</cbc:IdentificationCode>
+        </cac:Country>
+      </cac:PostalAddress>
+      <cac:PartyLegalEntity>
+        <cbc:RegistrationName>Norrminds AB</cbc:RegistrationName>
+        <cbc:CompanyID schemeID="0007">5594936055</cbc:CompanyID>
+      </cac:PartyLegalEntity>
+    </cac:Party>
+  </cac:AccountingCustomerParty>
+  <cac:PaymentMeans>
+    <cbc:PaymentMeansCode>30</cbc:PaymentMeansCode>
+    <cbc:PaymentID>26060131647046</cbc:PaymentID>
+    <cac:PayeeFinancialAccount>
+      <cbc:ID>6234520</cbc:ID>
+      <cac:FinancialInstitutionBranch>
+        <cbc:ID>SE:BANKGIRO</cbc:ID>
+      </cac:FinancialInstitutionBranch>
+    </cac:PayeeFinancialAccount>
+  </cac:PaymentMeans>
+  <cac:PaymentTerms>
+    <cbc:Note>Faktura utställd genom faktureringstjänsten Billogram av Tekniska verken i Linköping AB (publ). Betalning sker med befriande verkan till angivet konto. </cbc:Note>
+  </cac:PaymentTerms>
+  <cac:TaxTotal>
+    <cbc:TaxAmount currencyID="SEK">35.92</cbc:TaxAmount>
+    <cac:TaxSubtotal>
+      <cbc:TaxableAmount currencyID="SEK">143.66</cbc:TaxableAmount>
+      <cbc:TaxAmount currencyID="SEK">35.92</cbc:TaxAmount>
+      <cac:TaxCategory>
+        <cbc:ID>S</cbc:ID>
+        <cbc:Percent>25</cbc:Percent>
+        <cac:TaxScheme>
+          <cbc:ID>VAT</cbc:ID>
+        </cac:TaxScheme>
+      </cac:TaxCategory>
+    </cac:TaxSubtotal>
+  </cac:TaxTotal>
+  <cac:LegalMonetaryTotal>
+    <cbc:LineExtensionAmount currencyID="SEK">143.66</cbc:LineExtensionAmount>
+    <cbc:TaxExclusiveAmount currencyID="SEK">143.66</cbc:TaxExclusiveAmount>
+    <cbc:TaxInclusiveAmount currencyID="SEK">179.58</cbc:TaxInclusiveAmount>
+    <cbc:PayableRoundingAmount currencyID="SEK">0.42</cbc:PayableRoundingAmount>
+    <cbc:PayableAmount currencyID="SEK">180.00</cbc:PayableAmount>
+  </cac:LegalMonetaryTotal>
+  <cac:InvoiceLine>
+    <cbc:ID>1</cbc:ID>
+    <cbc:Note>Period: 2026-05-01 - 2026-05-31 |
+1 månad, 132 kr/månad</cbc:Note>
+    <cbc:InvoicedQuantity unitCode="H87">1.00</cbc:InvoicedQuantity>
+    <cbc:LineExtensionAmount currencyID="SEK">132.00</cbc:LineExtensionAmount>
+    <cac:Item>
+      <cbc:Name>Abonnemangsavgift 16 A</cbc:Name>
+      <cac:ClassifiedTaxCategory>
+        <cbc:ID>S</cbc:ID>
+        <cbc:Percent>25.00</cbc:Percent>
+        <cac:TaxScheme>
+          <cbc:ID>VAT</cbc:ID>
+        </cac:TaxScheme>
+      </cac:ClassifiedTaxCategory>
+    </cac:Item>
+    <cac:Price>
+      <cbc:PriceAmount currencyID="SEK">132.00</cbc:PriceAmount>
+    </cac:Price>
+  </cac:InvoiceLine>
+  <cac:InvoiceLine>
+    <cbc:ID>2</cbc:ID>
+    <cbc:Note>Period: 2026-05-01 - 2026-05-31 |
+Mätare: 735999144013330979:P.s |
+0 kW, 0 kr/kW</cbc:Note>
+    <cbc:InvoicedQuantity unitCode="H87">1.00</cbc:InvoicedQuantity>
+    <cbc:LineExtensionAmount currencyID="SEK">0.00</cbc:LineExtensionAmount>
+    <cac:Item>
+      <cbc:Name>Effektavgift sommar</cbc:Name>
+      <cac:ClassifiedTaxCategory>
+        <cbc:ID>S</cbc:ID>
+        <cbc:Percent>25.00</cbc:Percent>
+        <cac:TaxScheme>
+          <cbc:ID>VAT</cbc:ID>
+        </cac:TaxScheme>
+      </cac:ClassifiedTaxCategory>
+    </cac:Item>
+    <cac:Price>
+      <cbc:PriceAmount currencyID="SEK">0.00</cbc:PriceAmount>
+    </cac:Price>
+  </cac:InvoiceLine>
+  <cac:InvoiceLine>
+    <cbc:ID>3</cbc:ID>
+    <cbc:Note>Period: 2026-05-01 - 2026-05-31 |
+Mätare: 7359992925686464 |
+0 kWh, 11.92 öre/kWh</cbc:Note>
+    <cbc:InvoicedQuantity unitCode="H87">1.00</cbc:InvoicedQuantity>
+    <cbc:LineExtensionAmount currencyID="SEK">0.00</cbc:LineExtensionAmount>
+    <cac:Item>
+      <cbc:Name>Överföringsavgift</cbc:Name>
+      <cac:ClassifiedTaxCategory>
+        <cbc:ID>S</cbc:ID>
+        <cbc:Percent>25.00</cbc:Percent>
+        <cac:TaxScheme>
+          <cbc:ID>VAT</cbc:ID>
+        </cac:TaxScheme>
+      </cac:ClassifiedTaxCategory>
+    </cac:Item>
+    <cac:Price>
+      <cbc:PriceAmount currencyID="SEK">0.00</cbc:PriceAmount>
+    </cac:Price>
+  </cac:InvoiceLine>
+  <cac:InvoiceLine>
+    <cbc:ID>4</cbc:ID>
+    <cbc:Note>Period: 2026-05-01 - 2026-05-31 |
+Mätare: 7359992925686464 |
+0 kWh, 36 öre/kWh</cbc:Note>
+    <cbc:InvoicedQuantity unitCode="H87">1.00</cbc:InvoicedQuantity>
+    <cbc:LineExtensionAmount currencyID="SEK">0.00</cbc:LineExtensionAmount>
+    <cac:Item>
+      <cbc:Name>Energiskatt</cbc:Name>
+      <cac:ClassifiedTaxCategory>
+        <cbc:ID>S</cbc:ID>
+        <cbc:Percent>25.00</cbc:Percent>
+        <cac:TaxScheme>
+          <cbc:ID>VAT</cbc:ID>
+        </cac:TaxScheme>
+      </cac:ClassifiedTaxCategory>
+    </cac:Item>
+    <cac:Price>
+      <cbc:PriceAmount currencyID="SEK">0.00</cbc:PriceAmount>
+    </cac:Price>
+  </cac:InvoiceLine>
+  <cac:InvoiceLine>
+    <cbc:ID>5</cbc:ID>
+    <cbc:Note>Period: 2026-05-01 - 2026-05-31 |
+1 månad, 139.89 kr/år</cbc:Note>
+    <cbc:InvoicedQuantity unitCode="H87">1.00</cbc:InvoicedQuantity>
+    <cbc:LineExtensionAmount currencyID="SEK">11.66</cbc:LineExtensionAmount>
+    <cac:Item>
+      <cbc:Name>Myndighetsavgift</cbc:Name>
+      <cac:ClassifiedTaxCategory>
+        <cbc:ID>S</cbc:ID>
+        <cbc:Percent>25.00</cbc:Percent>
+        <cac:TaxScheme>
+          <cbc:ID>VAT</cbc:ID>
+        </cac:TaxScheme>
+      </cac:ClassifiedTaxCategory>
+    </cac:Item>
+    <cac:Price>
+      <cbc:PriceAmount currencyID="SEK">11.66</cbc:PriceAmount>
+    </cac:Price>
+  </cac:InvoiceLine>
+  <cac:AdditionalDocumentReference>
+    <cbc:ID>norrminds-peppol-invoice-26060131647046.pdf</cbc:ID>
+    <cac:Attachment>
+      <cbc:EmbeddedDocumentBinaryObject mimeCode="application/pdf" filename="norrminds-peppol-invoice-26060131647046.pdf">JVBERi0xLjMKJenr...ODA3CiUlRU9GCg==</cbc:EmbeddedDocumentBinaryObject>
+    </cac:Attachment>
+  </cac:AdditionalDocumentReference>
+</Invoice>

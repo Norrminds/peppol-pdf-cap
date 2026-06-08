@@ -77,7 +77,7 @@ describe('normalizeUblDocument', () => {
   })
 
   test('normalizes invoice line notes for detailed utility invoices', () => {
-    const xml = readFileSync(join(import.meta.dirname, '..', 'samples', 'tekniska-verken-invoice.xml'), 'utf8')
+    const xml = readFileSync(join(import.meta.dirname, 'fixtures', 'tekniska-verken-invoice.xml'), 'utf8')
     const model = normalizeUblDocument(parseUblXml(xml))
 
     expect(model.lines[0].note).toContain('Period: 2026-05-01 - 2026-05-31')

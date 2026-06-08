@@ -27,10 +27,47 @@ describe('renderInvoicePdf', () => {
     expect(serialized).toContain('Customer Company Oy')
     expect(serialized).toContain('Professional services - Consulting services')
     expect(serialized).toContain('Amount due')
+    expect(serialized).toContain('125.00 EUR')
+  })
+
+  test('formats monetary amounts with thousands separators', () => {
+    const model = invoiceModel()
+    model.totals.due = '12345.67'
+    model.totals.net = '12345.67'
+    model.totals.tax = '3086.42'
+    model.totals.gross = '15432.09'
+    model.lines[0].unitPrice = '12345.67'
+    model.lines[0].lineTotal = '12345.67'
+    model.taxSubtotals[0].taxableAmount = '12345.67'
+    model.taxSubtotals[0].taxAmount = '3086.42'
+
+    const definition = buildInvoiceDocDefinition(model, new Date('2026-06-05T12:00:00Z'))
+    const serialized = JSON.stringify(definition)
+
+    expect(serialized).toContain('12,345.67 EUR')
+    expect(serialized).toContain('3,086.42 EUR')
+    expect(serialized).toContain('15,432.09 EUR')
+  })
+
+  test('preserves source decimal precision while adding grouping', () => {
+    const model = invoiceModel()
+    model.totals.due = '12345.6789'
+    model.lines[0].unitPrice = '12345.6789'
+    model.lines[0].lineTotal = '12345.6000'
+    model.taxSubtotals[0].taxableAmount = '12345.6789'
+    model.taxSubtotals[0].taxAmount = '3086.4000'
+
+    const definition = buildInvoiceDocDefinition(model, new Date('2026-06-05T12:00:00Z'))
+    const serialized = JSON.stringify(definition)
+
+    expect(serialized).toContain('12,345.6789 EUR')
+    expect(serialized).toContain('12,345.6000 EUR')
+    expect(serialized).toContain('3,086.4000 EUR')
+    expect(serialized).not.toContain('12,345.68 EUR')
   })
 
   test('includes line notes in the PDF document definition', () => {
-    const xml = readFileSync(join(import.meta.dirname, '..', 'samples', 'tekniska-verken-invoice.xml'), 'utf8')
+    const xml = readFileSync(join(import.meta.dirname, 'fixtures', 'tekniska-verken-invoice.xml'), 'utf8')
     const model = normalizeUblDocument(parseUblXml(xml))
     const definition = buildInvoiceDocDefinition(model, new Date('2026-06-05T12:00:00Z'))
     const serialized = JSON.stringify(definition)

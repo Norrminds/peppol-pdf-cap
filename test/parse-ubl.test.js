@@ -26,6 +26,14 @@ describe('parseUblXml', () => {
     expect(result.document.ID).toBe('CN-1000')
   })
 
+  test('detects UBL Invoice documents wrapped in StandardBusinessDocument', () => {
+    const result = parseUblXml(fixture('invoice-sbdh.xml'))
+
+    expect(result.documentType).toBe('Invoice')
+    expect(result.rootName).toBe('Invoice')
+    expect(result.document.ID).toBe('INV-1000')
+  })
+
   test('rejects malformed XML', () => {
     expect(() => parseUblXml('<Invoice><cbc:ID>broken</Invoice>')).toThrow(/Invalid XML/)
   })

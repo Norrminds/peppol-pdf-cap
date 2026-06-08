@@ -424,7 +424,22 @@ function right(text) {
 
 function money(value, currency) {
   if (!value) return 'n/a'
-  return currency ? `${value} ${currency}` : value
+
+  const formatted = formatAmount(value)
+  return currency ? `${formatted} ${currency}` : formatted
+}
+
+function formatAmount(value) {
+  const normalized = String(value).trim().replace(/\s+/g, '')
+  if (!normalized) return String(value)
+
+  const match = normalized.match(/^([+-]?)(\d+)([.,](\d+))?$/)
+  if (!match) return String(value)
+
+  const [, sign, integerPart, , decimalPart = ''] = match
+  const groupedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  const fraction = decimalPart ? `.${decimalPart}` : ''
+  return `${sign}${groupedInteger}${fraction}`
 }
 
 function vatText(line) {

@@ -54,6 +54,18 @@ describe('invoice PDF route', () => {
     expect(response.body.subarray(0, 4).toString('ascii')).toBe('%PDF')
   })
 
+  test('returns a PDF for StandardBusinessDocument-wrapped UBL Invoice XML', async () => {
+    const response = await request(createApp())
+      .post('/invoice-pdf')
+      .set('Content-Type', 'application/xml')
+      .send(fixture('invoice-sbdh.xml'))
+
+    expect(response.status).toBe(200)
+    expect(response.headers['content-type']).toContain('application/pdf')
+    expect(response.headers['content-disposition']).toContain('INV-1000.pdf')
+    expect(response.body.subarray(0, 4).toString('ascii')).toBe('%PDF')
+  })
+
   test('returns JSON 400 for invalid XML', async () => {
     const response = await request(createApp())
       .post('/invoice-pdf')
