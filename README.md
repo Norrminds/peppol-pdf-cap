@@ -194,6 +194,30 @@ curl -sS -X POST \
   --output invoice.pdf
 ```
 
+## Postman
+
+A ready-to-import Postman collection is included at:
+
+```text
+postman/peppol-pdf-cap.postman_collection.json
+```
+
+How to use it:
+
+1. Import the collection into Postman.
+2. Set `baseUrl` to either:
+   - `http://localhost:4004` for local development
+   - `https://<btp-route>` for the deployed BTP app
+3. Set `apiKey` only if `PDF_API_KEY` is configured in the service.
+4. Use `Health` for a smoke test.
+5. Use `Invoice PDF` to post XML and receive a PDF response.
+
+The collection includes a small sample invoice in the `invoiceXml` variable. You can replace that variable value with:
+
+- raw UBL `Invoice`
+- raw UBL `CreditNote`
+- `StandardBusinessDocument` containing either one
+
 ## SAP BTP Deployment
 
 This repository supports two Cloud Foundry deployment styles:

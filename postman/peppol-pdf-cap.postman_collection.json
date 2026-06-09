@@ -1,0 +1,90 @@
+{
+  "info": {
+    "_postman_id": "0d9aa5bb-4f35-42e8-8901-f151b4efecf3",
+    "name": "Peppol PDF CAP",
+    "description": "Postman collection for the Peppol PDF CAP service. Configure `baseUrl` and optionally `apiKey`, then call `/health` or `/invoice-pdf`.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:4004"
+    },
+    {
+      "key": "apiKey",
+      "value": ""
+    },
+    {
+      "key": "invoiceXml",
+      "value": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Invoice xmlns=\"urn:oasis:names:specification:ubl:schema:xsd:Invoice-2\"\n  xmlns:cac=\"urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2\"\n  xmlns:cbc=\"urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2\">\n  <cbc:CustomizationID>urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0</cbc:CustomizationID>\n  <cbc:ProfileID>urn:fdc:peppol.eu:2017:poacc:billing:01:1.0</cbc:ProfileID>\n  <cbc:ID>INV-1000</cbc:ID>\n  <cbc:IssueDate>2026-06-05</cbc:IssueDate>\n  <cbc:DueDate>2026-07-05</cbc:DueDate>\n  <cbc:InvoiceTypeCode>380</cbc:InvoiceTypeCode>\n  <cbc:DocumentCurrencyCode>EUR</cbc:DocumentCurrencyCode>\n  <cbc:BuyerReference>BUYER-REF-1</cbc:BuyerReference>\n  <cac:AccountingSupplierParty>\n    <cac:Party>\n      <cac:PartyName>\n        <cbc:Name>Nordic Supplier AB</cbc:Name>\n      </cac:PartyName>\n      <cac:PartyLegalEntity>\n        <cbc:RegistrationName>Nordic Supplier AB</cbc:RegistrationName>\n      </cac:PartyLegalEntity>\n      <cac:PartyTaxScheme>\n        <cbc:CompanyID>SE559999999901</cbc:CompanyID>\n        <cac:TaxScheme>\n          <cbc:ID>VAT</cbc:ID>\n        </cac:TaxScheme>\n      </cac:PartyTaxScheme>\n    </cac:Party>\n  </cac:AccountingSupplierParty>\n  <cac:AccountingCustomerParty>\n    <cac:Party>\n      <cac:PartyName>\n        <cbc:Name>Customer Company Oy</cbc:Name>\n      </cac:PartyName>\n      <cac:PartyLegalEntity>\n        <cbc:RegistrationName>Customer Company Oy</cbc:RegistrationName>\n      </cac:PartyLegalEntity>\n    </cac:Party>\n  </cac:AccountingCustomerParty>\n  <cac:TaxTotal>\n    <cbc:TaxAmount currencyID=\"EUR\">25.00</cbc:TaxAmount>\n    <cac:TaxSubtotal>\n      <cbc:TaxableAmount currencyID=\"EUR\">100.00</cbc:TaxableAmount>\n      <cbc:TaxAmount currencyID=\"EUR\">25.00</cbc:TaxAmount>\n      <cac:TaxCategory>\n        <cbc:ID>S</cbc:ID>\n        <cbc:Percent>25</cbc:Percent>\n        <cac:TaxScheme>\n          <cbc:ID>VAT</cbc:ID>\n        </cac:TaxScheme>\n      </cac:TaxCategory>\n    </cac:TaxSubtotal>\n  </cac:TaxTotal>\n  <cac:LegalMonetaryTotal>\n    <cbc:TaxExclusiveAmount currencyID=\"EUR\">100.00</cbc:TaxExclusiveAmount>\n    <cbc:TaxInclusiveAmount currencyID=\"EUR\">125.00</cbc:TaxInclusiveAmount>\n    <cbc:PayableAmount currencyID=\"EUR\">125.00</cbc:PayableAmount>\n  </cac:LegalMonetaryTotal>\n  <cac:InvoiceLine>\n    <cbc:ID>1</cbc:ID>\n    <cbc:InvoicedQuantity unitCode=\"HUR\">4</cbc:InvoicedQuantity>\n    <cbc:LineExtensionAmount currencyID=\"EUR\">100.00</cbc:LineExtensionAmount>\n    <cac:Item>\n      <cbc:Name>Professional services</cbc:Name>\n      <cbc:Description>Consulting services</cbc:Description>\n      <cac:ClassifiedTaxCategory>\n        <cbc:ID>S</cbc:ID>\n        <cbc:Percent>25</cbc:Percent>\n        <cac:TaxScheme>\n          <cbc:ID>VAT</cbc:ID>\n        </cac:TaxScheme>\n      </cac:ClassifiedTaxCategory>\n    </cac:Item>\n    <cac:Price>\n      <cbc:PriceAmount currencyID=\"EUR\">25.00</cbc:PriceAmount>\n    </cac:Price>\n  </cac:InvoiceLine>\n</Invoice>"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "health"
+          ]
+        },
+        "description": "Simple readiness and smoke-test endpoint."
+      },
+      "response": []
+    },
+    {
+      "name": "Invoice PDF",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const apiKey = pm.collectionVariables.get('apiKey');",
+              "if (apiKey) {",
+              "  pm.request.headers.upsert({ key: 'X-API-Key', value: apiKey });",
+              "} else {",
+              "  pm.request.headers.remove('X-API-Key');",
+              "}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/xml"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{{invoiceXml}}",
+          "options": {
+            "raw": {
+              "language": "xml"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/invoice-pdf",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "invoice-pdf"
+          ]
+        },
+        "description": "Posts a Peppol UBL Invoice or CreditNote XML payload and returns a PDF binary response."
+      },
+      "response": []
+    }
+  ]
+}
