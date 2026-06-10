@@ -80,7 +80,22 @@ Runtime config (`PDF_API_KEY`, `XML_BODY_LIMIT`, `PORT`, `NODE_ENV`) is unchange
   `200 application/pdf`, `Content-Disposition: inline; filename="INV-1000.pdf"`,
   a valid 4309-byte `%PDF`; invalid XML → `400` JSON error.
 
+## Rename
+
+On the `lean-node-service` branch the app identifier was renamed
+`peppol-pdf-cap` → `peppol-pdf` (package name, `manifest.yml` app name, health
+response `service` field + its test assertion, Postman collection filename, and
+all README references). The PDF footer branding changed `by Peppol PDF CAP` →
+`by Peppol PDF`. The GitHub repository keeps the name `peppol-pdf-cap`, and the
+`master` branch (the CAP build) is left untouched.
+
+The PDF output was confirmed unchanged by the rename and the CAP removal:
+rendering the fixtures through the `master` and lean render code with an
+identical injected timestamp produced byte-identical content streams; the only
+differences were pdfkit's per-render `/CreationDate` and `/ID` metadata, which
+vary on every render regardless of branch.
+
 ## Out of scope
 
 No changes to PDF layout, UBL parsing rules, normalization, or the security
-model. No rename of the `peppol-pdf-cap` app/repo identifier.
+model. No rename of the GitHub repository or the `master` branch.

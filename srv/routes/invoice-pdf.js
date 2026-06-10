@@ -10,7 +10,7 @@ function registerInvoicePdfRoutes(app) {
   app.get('/health', (_req, res) => {
     res.status(200).json({
       status: 'ok',
-      service: 'peppol-pdf-cap'
+      service: 'peppol-pdf'
     })
   })
 

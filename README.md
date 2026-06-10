@@ -23,7 +23,7 @@ It is designed as a stateless runtime component and does not require a database,
 flowchart LR
     A[Peppol XML Source\nERP, middleware, or partner flow]
     B[SAP Integration Suite iFlow\nRequest-Reply]
-    C[SAP BTP Cloud Foundry\npeppol-pdf-cap]
+    C[SAP BTP Cloud Foundry\npeppol-pdf]
     D[/POST /invoice-pdf/]
     E[Parse and validate XML\nInvoice, CreditNote, or SBD wrapper]
     F[Normalize invoice model]
@@ -83,7 +83,7 @@ Example response:
 ```json
 {
   "status": "ok",
-  "service": "peppol-pdf-cap"
+  "service": "peppol-pdf"
 }
 ```
 
@@ -201,7 +201,7 @@ curl -sS -X POST \
 A ready-to-import Postman collection is included at:
 
 ```text
-postman/peppol-pdf-cap.postman_collection.json
+postman/peppol-pdf.postman_collection.json
 ```
 
 How to use it:
@@ -239,7 +239,7 @@ cf push
 
 The included `manifest.yml` configures:
 
-- app name: `peppol-pdf-cap`
+- app name: `peppol-pdf`
 - buildpack: `nodejs_buildpack`
 - memory: `256M`
 - disk quota: `512M`
@@ -252,15 +252,15 @@ The included `manifest.yml` configures:
 Set an API key unless the endpoint is intentionally open inside a trusted private landscape.
 
 ```bash
-cf set-env peppol-pdf-cap PDF_API_KEY "<shared-secret>"
-cf set-env peppol-pdf-cap XML_BODY_LIMIT "5mb"
-cf restage peppol-pdf-cap
+cf set-env peppol-pdf PDF_API_KEY "<shared-secret>"
+cf set-env peppol-pdf XML_BODY_LIMIT "5mb"
+cf restage peppol-pdf
 ```
 
 ### 4. Get the application route
 
 ```bash
-cf app peppol-pdf-cap
+cf app peppol-pdf
 ```
 
 Use the reported route as the base URL for callers:
@@ -358,7 +358,7 @@ Expected result:
 ```json
 {
   "status": "ok",
-  "service": "peppol-pdf-cap"
+  "service": "peppol-pdf"
 }
 ```
 
@@ -367,7 +367,7 @@ Expected result:
 For Cloud Foundry runtime logs:
 
 ```bash
-cf logs peppol-pdf-cap --recent
+cf logs peppol-pdf --recent
 ```
 
 ### Scaling
@@ -375,7 +375,7 @@ cf logs peppol-pdf-cap --recent
 Example horizontal scale-out:
 
 ```bash
-cf scale peppol-pdf-cap -i 2
+cf scale peppol-pdf -i 2
 ```
 
 Increase memory if rendering volume or document complexity grows beyond the current `256M` profile.

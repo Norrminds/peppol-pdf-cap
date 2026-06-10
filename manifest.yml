@@ -1,5 +1,5 @@
 applications:
-  - name: peppol-pdf-cap
+  - name: peppol-pdf
     buildpacks:
       - nodejs_buildpack
     memory: 256M

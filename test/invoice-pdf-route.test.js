@@ -27,7 +27,7 @@ describe('invoice PDF route', () => {
     const response = await request(createApp()).get('/health')
 
     expect(response.status).toBe(200)
-    expect(response.body).toMatchObject({ status: 'ok', service: 'peppol-pdf-cap' })
+    expect(response.body).toMatchObject({ status: 'ok', service: 'peppol-pdf' })
   })
 
   test('returns a PDF for UBL Invoice XML', async () => {
