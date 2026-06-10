@@ -23,5 +23,10 @@
     "@cap-js/cds-types": "^0.8.0",
     "supertest": "^7.0.0",
     "vitest": "^4.1.8"
+  },
+  "cds": {
+    "requires": {
+      "auth": "dummy"
+    }
   }
 }
