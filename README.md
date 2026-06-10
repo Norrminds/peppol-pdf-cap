@@ -372,11 +372,17 @@ cf logs peppol-pdf --recent
 
 ### Scaling
 
-Example horizontal scale-out:
+The `manifest.yml` deploys `2` instances by default for availability. The
+service is stateless, so it scales horizontally without coordination. Adjust at
+runtime with:
 
 ```bash
-cf scale peppol-pdf -i 2
+cf scale peppol-pdf -i <count>
 ```
+
+The app handles `SIGTERM` gracefully — it stops accepting new connections,
+drains in-flight requests, then exits — so rolling restarts and scale-downs do
+not drop active requests.
 
 Increase memory if rendering volume or document complexity grows beyond the current `256M` profile.
 
