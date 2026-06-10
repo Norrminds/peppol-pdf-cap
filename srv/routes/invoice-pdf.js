@@ -1,5 +1,5 @@
 const crypto = require('node:crypto')
-const getRawBody = require('raw-body')
+const express = require('express')
 const { AppError, PayloadTooLargeError, UnauthorizedError, errorResponse } = require('../lib/errors')
 const { safePdfFilename } = require('../lib/filename')
 const { normalizeUblDocument } = require('../lib/normalize-invoice')
@@ -14,49 +14,57 @@ function registerInvoicePdfRoutes(app) {
     })
   })
 
-  app.post('/invoice-pdf', async (req, res) => {
-    try {
-      requireApiKey(req)
+  app.post('/invoice-pdf', requireApiKey, readXmlBody, async (req, res) => {
+    const xml = req.body.toString('utf8')
+    const parsed = parseUblXml(xml)
+    const model = normalizeUblDocument(parsed)
+    const pdf = await renderInvoicePdf(model)
+    const filename = safePdfFilename(model.id)
 
-      const xml = await readRawXml(req)
-      const parsed = parseUblXml(xml)
-      const model = normalizeUblDocument(parsed)
-      const pdf = await renderInvoicePdf(model)
-      const filename = safePdfFilename(model.id)
+    res.status(200)
+    res.set('Content-Type', 'application/pdf')
+    res.set('Content-Disposition', `inline; filename="${filename}"`)
+    res.send(pdf)
+  })
 
-      res.status(200)
-      res.set('Content-Type', 'application/pdf')
-      res.set('Content-Disposition', `inline; filename="${filename}"`)
-      res.send(pdf)
-    } catch (error) {
-      sendError(res, error)
-    }
+  // Final error handler. Express 5 forwards rejected promises from the async
+  // route handler here automatically, so the handler needs no try/catch.
+  app.use((error, _req, res, _next) => {
+    sendError(res, error)
   })
 }
 
-async function readRawXml(req) {
-  try {
-    return await getRawBody(req, {
-      encoding: 'utf8',
-      limit: process.env.XML_BODY_LIMIT || '5mb'
-    })
-  } catch (error) {
-    if (error.type === 'entity.too.large' || error.statusCode === 413) {
-      throw new PayloadTooLargeError()
+// Read the raw request body into a Buffer. The size limit is resolved per
+// request so XML_BODY_LIMIT can be changed (and overridden in tests) without
+// re-creating the parser at module load. `type: '*/*'` accepts any content
+// type, since callers post application/xml.
+function readXmlBody(req, res, next) {
+  const parser = express.raw({
+    type: '*/*',
+    limit: process.env.XML_BODY_LIMIT || '5mb'
+  })
+
+  parser(req, res, error => {
+    if (!error) return next()
+
+    if (error.type === 'entity.too.large' || error.status === 413 || error.statusCode === 413) {
+      return next(new PayloadTooLargeError())
     }
 
-    throw error
-  }
+    next(error)
+  })
 }
 
-function requireApiKey(req) {
+function requireApiKey(req, _res, next) {
   const expected = process.env.PDF_API_KEY
-  if (!expected) return
+  if (!expected) return next()
 
   const actual = req.get('x-api-key') || ''
   if (!safeEquals(actual, expected)) {
-    throw new UnauthorizedError()
+    return next(new UnauthorizedError())
   }
+
+  next()
 }
 
 function safeEquals(actual, expected) {

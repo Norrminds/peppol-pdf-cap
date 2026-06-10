@@ -1,8 +1,15 @@
-const cds = require('@sap/cds')
+const express = require('express')
 const { registerInvoicePdfRoutes } = require('./srv/routes/invoice-pdf')
 
-cds.on('bootstrap', app => {
-  registerInvoicePdfRoutes(app)
-})
+const app = express()
+registerInvoicePdfRoutes(app)
 
-module.exports = cds.server
+const port = process.env.PORT || 4004
+
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log(`peppol-pdf listening on port ${port}`)
+  })
+}
+
+module.exports = app
