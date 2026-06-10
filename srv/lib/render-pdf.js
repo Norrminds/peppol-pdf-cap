@@ -52,7 +52,7 @@ function buildInvoiceDocDefinition(model, generatedAt = new Date()) {
       margin: [36, 0, 36, 24],
       columns: [
         {
-          text: `Generated ${generatedAt.toISOString()} by Peppol PDF CAP`,
+          text: `Generated ${generatedAt.toISOString()} by Peppol PDF`,
           color: colors.muted,
           fontSize: 7
         },

@@ -1,8 +1,8 @@
 {
   "info": {
     "_postman_id": "0d9aa5bb-4f35-42e8-8901-f151b4efecf3",
-    "name": "Peppol PDF CAP",
-    "description": "Postman collection for the Peppol PDF CAP service. Configure `baseUrl` and optionally `apiKey`, then call `/health` or `/invoice-pdf`.",
+    "name": "Peppol PDF",
+    "description": "Postman collection for the Peppol PDF service. Configure `baseUrl` and optionally `apiKey`, then call `/health` or `/invoice-pdf`.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
