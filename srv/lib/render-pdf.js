@@ -52,7 +52,7 @@ function buildInvoiceDocDefinition(model, generatedAt = new Date()) {
       margin: [36, 0, 36, 24],
       columns: [
         {
-          text: `Generated ${generatedAt.toISOString()} by Peppol PDF CAP`,
+          text: `Generated ${generatedAt.toISOString()}`,
           color: colors.muted,
           fontSize: 7
         },
@@ -257,11 +257,11 @@ function lineItemsTable(model) {
   const body = [
     [
       tableHeader('Description'),
-      tableHeader('Qty'),
-      tableHeader('Unit'),
-      tableHeader('Price'),
-      tableHeader('VAT'),
-      tableHeader('Line total')
+      tableHeader('Qty', 'right'),
+      tableHeader('Unit', 'right'),
+      tableHeader('Price', 'right'),
+      tableHeader('VAT', 'right'),
+      tableHeader('Line total', 'right')
     ],
     ...model.lines.map(line => [
       lineDescriptionCell(line),
@@ -414,8 +414,8 @@ function smallValue(text) {
   return { text: text || 'n/a', fontSize: 8.5 }
 }
 
-function tableHeader(text) {
-  return { text, style: 'tableHeader', margin: [0, 2, 0, 2] }
+function tableHeader(text, alignment) {
+  return { text, style: 'tableHeader', alignment, margin: [0, 2, 0, 2] }
 }
 
 function right(text) {
