@@ -324,7 +324,7 @@ function totalsBlock(model) {
 
 function taxSummary(model) {
   const rows = [
-    [tableHeader('VAT'), tableHeader('Rate'), tableHeader('Base'), tableHeader('Tax')],
+    [tableHeader('VAT'), tableHeader('Rate'), tableHeader('Base', 'right'), tableHeader('Tax', 'right')],
     ...model.taxSubtotals.map(tax => [
       tax.category || 'n/a',
       tax.percent ? `${tax.percent}%` : 'n/a',
