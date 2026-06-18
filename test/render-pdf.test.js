@@ -97,6 +97,17 @@ describe('renderInvoicePdf', () => {
     }
   })
 
+  test('aligns VAT summary amount headers with right-aligned amount values', () => {
+    const definition = buildInvoiceDocDefinition(invoiceModel(), new Date('2026-06-05T12:00:00Z'))
+    const totals = definition.content.find(block => block.columns?.[0]?.stack?.[0]?.text === 'VAT summary')
+    const headers = totals.columns[0].stack[1].table.body[0]
+
+    expect(headers[0].alignment).toBeUndefined()
+    expect(headers[1].alignment).toBeUndefined()
+    expect(headers[2].alignment).toBe('right')
+    expect(headers[3].alignment).toBe('right')
+  })
+
   test('renders a PDF buffer', async () => {
     const buffer = await renderInvoicePdf(invoiceModel(), new Date('2026-06-05T12:00:00Z'))
 
