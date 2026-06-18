@@ -76,6 +76,27 @@ describe('renderInvoicePdf', () => {
     expect(serialized).toContain('Mätare: 7359992925686464')
   })
 
+  test('omits generator branding from the footer', () => {
+    const definition = buildInvoiceDocDefinition(invoiceModel(), new Date('2026-06-05T12:00:00Z'))
+    const footer = definition.footer(1, 2)
+    const serialized = JSON.stringify(footer)
+
+    expect(serialized).toContain('Generated 2026-06-05T12:00:00.000Z')
+    expect(serialized).not.toContain('by Peppol PDF')
+    expect(serialized).not.toContain('by Peppol PDF CAP')
+  })
+
+  test('aligns line item headers with right-aligned line item values', () => {
+    const definition = buildInvoiceDocDefinition(invoiceModel(), new Date('2026-06-05T12:00:00Z'))
+    const lineItems = definition.content.find(block => block.table?.body?.[0]?.[0]?.text === 'Description')
+    const headers = lineItems.table.body[0]
+
+    expect(headers[0].alignment).toBeUndefined()
+    for (const header of headers.slice(1)) {
+      expect(header.alignment).toBe('right')
+    }
+  })
+
   test('renders a PDF buffer', async () => {
     const buffer = await renderInvoicePdf(invoiceModel(), new Date('2026-06-05T12:00:00Z'))
 
