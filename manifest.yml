@@ -5,7 +5,7 @@ applications:
     instances: 2
     memory: 256M
     disk_quota: 512M
-    command: npm start
+    command: node server.js
     health-check-type: http
     health-check-http-endpoint: /health
     env:
