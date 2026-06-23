@@ -1,10 +1,13 @@
 applications:
-  - name: peppol-pdf-cap
+  - name: peppol-pdf
     buildpacks:
       - nodejs_buildpack
+    instances: 2
     memory: 256M
     disk_quota: 512M
-    command: npm start
+    command: node server.js
+    health-check-type: http
+    health-check-http-endpoint: /health
     env:
       NODE_ENV: production
       XML_BODY_LIMIT: 5mb

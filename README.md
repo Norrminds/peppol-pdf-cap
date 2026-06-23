@@ -1,6 +1,8 @@
-# Peppol PDF CAP
+# Peppol PDF
 
-SAP CAP Node.js service that converts Peppol BIS Billing 3.0 UBL `Invoice` and `CreditNote` XML into PDF documents.
+Lean Node.js (Express) service that converts Peppol BIS Billing 3.0 UBL `Invoice` and `CreditNote` XML into PDF documents.
+
+> This is the `lean-node-service` variant: the same use case as the original SAP CAP build, with the CAP framework removed. It runs as a plain Express app (`node server.js`) — no `@sap/cds`, no empty CDS model, no MTA packaging. All XML parsing, normalization, and PDF rendering logic is unchanged.
 
 The service is intended to be called synchronously from SAP Integration Suite iFlows or any other HTTP client that can post XML and consume a binary PDF response.
 
@@ -21,7 +23,7 @@ It is designed as a stateless runtime component and does not require a database,
 flowchart LR
     A[Peppol XML Source\nERP, middleware, or partner flow]
     B[SAP Integration Suite iFlow\nRequest-Reply]
-    C[SAP BTP Cloud Foundry\npeppol-pdf-cap]
+    C[SAP BTP Cloud Foundry\npeppol-pdf]
     D[/POST /invoice-pdf/]
     E[Parse and validate XML\nInvoice, CreditNote, or SBD wrapper]
     F[Normalize invoice model]
@@ -40,7 +42,7 @@ flowchart LR
     B --> I
 ```
 
-The deployed CAP service exposes a single synchronous conversion endpoint. The iFlow posts the Peppol XML payload to `/invoice-pdf`, receives the generated PDF in the HTTP response, and can then attach, store, or forward the PDF to downstream systems.
+The deployed service exposes a single synchronous conversion endpoint. The iFlow posts the Peppol XML payload to `/invoice-pdf`, receives the generated PDF in the HTTP response, and can then attach, store, or forward the PDF to downstream systems.
 
 ## Supported Input
 
@@ -81,7 +83,7 @@ Example response:
 ```json
 {
   "status": "ok",
-  "service": "peppol-pdf-cap"
+  "service": "peppol-pdf"
 }
 ```
 
@@ -129,7 +131,7 @@ Typical error statuses:
 | --- | --- | --- | --- |
 | `PDF_API_KEY` | No | unset | Shared secret for callers. When set, the request must include header `X-API-Key`. |
 | `XML_BODY_LIMIT` | No | `5mb` | Maximum accepted XML payload size. |
-| `PORT` | No | `4004` | CAP runtime port. |
+| `PORT` | No | `4004` | HTTP server port. |
 | `NODE_ENV` | No | environment dependent | Recommended `production` in deployed runtime. |
 
 ## Local Development
@@ -199,7 +201,7 @@ curl -sS -X POST \
 A ready-to-import Postman collection is included at:
 
 ```text
-postman/peppol-pdf-cap.postman_collection.json
+postman/peppol-pdf.postman_collection.json
 ```
 
 How to use it:
@@ -220,16 +222,7 @@ The collection includes a small sample invoice in the `invoiceXml` variable. You
 
 ## SAP BTP Deployment
 
-This repository supports two Cloud Foundry deployment styles:
-
-- `manifest.yml` for direct `cf push`
-- `mta.yaml` for MTA packaging and transport
-
-The runtime is a single Node.js CAP module with no backing services required for the current version.
-
-## Option 1: Direct Cloud Foundry Deployment
-
-Use this when you want the fastest path to a running service.
+The service deploys to Cloud Foundry with the Node.js buildpack using the included `manifest.yml` and a direct `cf push`. It is a single Node.js module with no backing services required.
 
 ### 1. Log in to Cloud Foundry
 
@@ -246,7 +239,7 @@ cf push
 
 The included `manifest.yml` configures:
 
-- app name: `peppol-pdf-cap`
+- app name: `peppol-pdf`
 - buildpack: `nodejs_buildpack`
 - memory: `256M`
 - disk quota: `512M`
@@ -259,15 +252,15 @@ The included `manifest.yml` configures:
 Set an API key unless the endpoint is intentionally open inside a trusted private landscape.
 
 ```bash
-cf set-env peppol-pdf-cap PDF_API_KEY "<shared-secret>"
-cf set-env peppol-pdf-cap XML_BODY_LIMIT "5mb"
-cf restage peppol-pdf-cap
+cf set-env peppol-pdf PDF_API_KEY "<shared-secret>"
+cf set-env peppol-pdf XML_BODY_LIMIT "5mb"
+cf restage peppol-pdf
 ```
 
 ### 4. Get the application route
 
 ```bash
-cf app peppol-pdf-cap
+cf app peppol-pdf
 ```
 
 Use the reported route as the base URL for callers:
@@ -287,35 +280,9 @@ curl -sS -X POST \
   --output invoice.pdf
 ```
 
-## Option 2: MTA Deployment
-
-Use this when your delivery process requires MTA artifacts.
-
-### 1. Build the MTA archive
-
-```bash
-mbt build
-```
-
-### 2. Deploy the archive
-
-```bash
-cf deploy mta_archives/peppol-pdf-cap_1.0.0.mtar
-```
-
-### 3. Set runtime variables and restage
-
-```bash
-cf set-env peppol-pdf-cap-srv PDF_API_KEY "<shared-secret>"
-cf set-env peppol-pdf-cap-srv XML_BODY_LIMIT "5mb"
-cf restage peppol-pdf-cap-srv
-```
-
-If your deployed application name differs, use the actual application name shown by `cf apps`.
-
 ## SAP Integration Suite iFlow Setup
 
-The recommended integration style is a synchronous Request-Reply call to the CAP app.
+The recommended integration style is a synchronous Request-Reply call to the service.
 
 ### Target Contract
 
@@ -332,7 +299,7 @@ The recommended integration style is a synchronous Request-Reply call to the CAP
 2. Keep the message body as the original XML payload.
 3. Add a Request-Reply step.
 4. Configure an HTTP receiver adapter.
-5. Call the CAP route at `/invoice-pdf`.
+5. Call the service route at `/invoice-pdf`.
 6. Pass through the PDF response body for storage, attachment handling, or downstream delivery.
 
 ### HTTP Receiver Adapter Settings
@@ -391,7 +358,7 @@ Expected result:
 ```json
 {
   "status": "ok",
-  "service": "peppol-pdf-cap"
+  "service": "peppol-pdf"
 }
 ```
 
@@ -400,18 +367,22 @@ Expected result:
 For Cloud Foundry runtime logs:
 
 ```bash
-cf logs peppol-pdf-cap --recent
+cf logs peppol-pdf --recent
 ```
-
-For MTA deployments, use the actual deployed application name if it differs.
 
 ### Scaling
 
-Example horizontal scale-out:
+The `manifest.yml` deploys `2` instances by default for availability. The
+service is stateless, so it scales horizontally without coordination. Adjust at
+runtime with:
 
 ```bash
-cf scale peppol-pdf-cap -i 2
+cf scale peppol-pdf -i <count>
 ```
+
+The app handles `SIGTERM` gracefully — it stops accepting new connections,
+drains in-flight requests, then exits — so rolling restarts and scale-downs do
+not drop active requests.
 
 Increase memory if rendering volume or document complexity grows beyond the current `256M` profile.
 
