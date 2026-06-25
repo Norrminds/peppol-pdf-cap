@@ -66,6 +66,7 @@ The service rejects:
 ```text
 GET  /health
 POST /invoice-pdf
+POST /invoice-pdf/hex
 ```
 
 ### Health Check
@@ -124,6 +125,34 @@ Typical error statuses:
 - `401` when `PDF_API_KEY` is configured and the request omits or sends the wrong `X-API-Key`
 - `413` when the request body exceeds the configured XML size limit
 - `500` for unexpected rendering failures
+
+### Hexadecimal PDF Endpoint
+
+Use `POST /invoice-pdf/hex` when the caller cannot consume a binary response
+body. It runs the exact same parse, normalize, and render pipeline as
+`/invoice-pdf` and produces the identical PDF, but returns the PDF bytes encoded
+as a lowercase hexadecimal string instead of raw binary.
+
+Request: identical to `/invoice-pdf` (same `POST`, `application/xml` body, and
+optional `X-API-Key` header).
+
+Successful response:
+
+```text
+HTTP/1.1 200 OK
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline; filename="<document-id>.pdf.hex"
+```
+
+The response body is a hex string (two characters per PDF byte, so its length is
+always even). Decode it back to the PDF with any hex decoder, for example in
+Node.js:
+
+```js
+const pdf = Buffer.from(hexString, 'hex') // identical to the /invoice-pdf bytes
+```
+
+Error responses use the same JSON shape and status codes as `/invoice-pdf`.
 
 ## Runtime Configuration
 

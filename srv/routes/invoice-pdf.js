@@ -15,11 +15,7 @@ function registerInvoicePdfRoutes(app) {
   })
 
   app.post('/invoice-pdf', requireApiKey, readXmlBody, async (req, res) => {
-    const xml = req.body.toString('utf8')
-    const parsed = parseUblXml(xml)
-    const model = normalizeUblDocument(parsed)
-    const pdf = await renderInvoicePdf(model)
-    const filename = safePdfFilename(model.id)
+    const { pdf, filename } = await buildPdfFromRequest(req)
 
     res.status(200)
     res.set('Content-Type', 'application/pdf')
@@ -27,11 +23,35 @@ function registerInvoicePdfRoutes(app) {
     res.send(pdf)
   })
 
+  // Same pipeline as /invoice-pdf, but the PDF bytes are returned as a
+  // lowercase hexadecimal string (text/plain) instead of raw binary, for
+  // callers that cannot handle a binary body.
+  app.post('/invoice-pdf/hex', requireApiKey, readXmlBody, async (req, res) => {
+    const { pdf, filename } = await buildPdfFromRequest(req)
+
+    res.status(200)
+    res.set('Content-Type', 'text/plain; charset=utf-8')
+    res.set('Content-Disposition', `inline; filename="${filename}.hex"`)
+    res.send(pdf.toString('hex'))
+  })
+
   // Final error handler. Express 5 forwards rejected promises from the async
   // route handler here automatically, so the handler needs no try/catch.
   app.use((error, _req, res, _next) => {
     sendError(res, error)
   })
+}
+
+// Shared pipeline for the PDF routes: parse the raw UBL XML body, normalize it
+// to the invoice model, render the PDF, and derive a safe filename.
+async function buildPdfFromRequest(req) {
+  const xml = req.body.toString('utf8')
+  const parsed = parseUblXml(xml)
+  const model = normalizeUblDocument(parsed)
+  const pdf = await renderInvoicePdf(model)
+  const filename = safePdfFilename(model.id)
+
+  return { pdf, filename }
 }
 
 // Read the raw request body into a Buffer. The size limit is resolved per

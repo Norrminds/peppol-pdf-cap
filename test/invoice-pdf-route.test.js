@@ -66,6 +66,34 @@ describe('invoice PDF route', () => {
     expect(response.body.subarray(0, 4).toString('ascii')).toBe('%PDF')
   })
 
+  test('returns the PDF as hexadecimal for UBL Invoice XML', async () => {
+    const response = await request(createApp())
+      .post('/invoice-pdf/hex')
+      .set('Content-Type', 'application/xml')
+      .send(fixture('invoice.xml'))
+
+    expect(response.status).toBe(200)
+    expect(response.headers['content-type']).toContain('text/plain')
+    expect(response.headers['content-disposition']).toContain('INV-1000.pdf.hex')
+
+    const hex = response.text
+    expect(hex).toMatch(/^[0-9a-f]+$/)
+    expect(hex.length % 2).toBe(0)
+    // Hex-decode and confirm it is the same %PDF document the binary route emits.
+    expect(Buffer.from(hex, 'hex').subarray(0, 4).toString('ascii')).toBe('%PDF')
+  })
+
+  test('hex route honors the API key when configured', async () => {
+    process.env.PDF_API_KEY = 'secret'
+
+    const missingKey = await request(createApp())
+      .post('/invoice-pdf/hex')
+      .set('Content-Type', 'application/xml')
+      .send(fixture('invoice.xml'))
+
+    expect(missingKey.status).toBe(401)
+  })
+
   test('returns JSON 400 for invalid XML', async () => {
     const response = await request(createApp())
       .post('/invoice-pdf')
