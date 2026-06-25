@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "0d9aa5bb-4f35-42e8-8901-f151b4efecf3",
     "name": "Peppol PDF",
-    "description": "Postman collection for the Peppol PDF service. Configure `baseUrl` and optionally `apiKey`, then call `/health` or `/invoice-pdf`.",
+    "description": "Postman collection for the Peppol PDF service. Configure `baseUrl` and optionally `apiKey`, then call `/health`, `/invoice-pdf`, or `/invoice-pdf/hex`.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -83,6 +83,55 @@
           ]
         },
         "description": "Posts a Peppol UBL Invoice or CreditNote XML payload and returns a PDF binary response."
+      },
+      "response": []
+    },
+    {
+      "name": "Invoice PDF (hex)",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const apiKey = pm.collectionVariables.get('apiKey');",
+              "if (apiKey) {",
+              "  pm.request.headers.upsert({ key: 'X-API-Key', value: apiKey });",
+              "} else {",
+              "  pm.request.headers.remove('X-API-Key');",
+              "}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/xml"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{{invoiceXml}}",
+          "options": {
+            "raw": {
+              "language": "xml"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/invoice-pdf/hex",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "invoice-pdf",
+            "hex"
+          ]
+        },
+        "description": "Same as Invoice PDF, but returns the PDF as a lowercase hexadecimal string (Content-Type text/plain). Decode the hex back to bytes to obtain the identical PDF. Useful for callers that cannot consume a binary response body."
       },
       "response": []
     }
